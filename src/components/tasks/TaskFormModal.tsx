@@ -18,7 +18,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerChangeEvent } from '@react-native-community/datetimepicker';
 import { Task, TaskPriority, TaskStatus } from '@/models/Task';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
@@ -127,18 +127,20 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
     return new Date();
   };
 
-  const handleDatePickerChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const handleValueChange = (_event: DateTimePickerChangeEvent, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
-    if (event.type === 'set' && selectedDate) {
+    if (selectedDate) {
       const yyyy = selectedDate.getFullYear();
       const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const dd = String(selectedDate.getDate()).padStart(2, '0');
       setDueDate(`${yyyy}-${mm}-${dd}`);
-    } else if (event.type === 'dismissed') {
-      setShowDatePicker(false);
     }
+  };
+
+  const handleDismiss = () => {
+    setShowDatePicker(false);
   };
 
   const handleSubmit = async () => {
@@ -337,7 +339,8 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                   value={getParsedDate()}
                   mode="date"
                   display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                  onChange={handleDatePickerChange}
+                  onValueChange={handleValueChange}
+                  onDismiss={handleDismiss}
                 />
               ) : null}
 
