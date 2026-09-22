@@ -32,7 +32,7 @@ Technical foundation for **Practical Exam 1: Task Management App (MMA301)** buil
 - **Keyword Search**: Instant search by task title or description.
 - **Pull-To-Refresh**: Native `RefreshControl` support on task list.
 - **Summary Metrics (`TaskStats`)**: Dashboard card displaying progress percentage, completion bar, and status breakdowns.
-- **Data Seeder (`demo.tsx`)**: One-click button to seed 4 realistic sample tasks into Firestore for instant grading screenshots.
+- **Data Seeder**: One-click button in EmptyState and Profile tab to seed realistic sample tasks into Firestore for instant grading screenshots.
 - **Continuous Integration (CI)**: Automated GitHub Actions pipeline verifying ESLint 9 and TypeScript compilation on push/PR.
 
 ---
@@ -142,11 +142,10 @@ assignments/
         ├── (auth)/
         │   └── login.tsx                 # Public/Guest entry screen
         └── (main)/
-            ├── _layout.tsx               # Bottom Tab Navigator
+            ├── _layout.tsx               # Bottom Tab Navigator (Home, Teams, Profile)
             ├── home.tsx                  # Home Screen (Task CRUD)
             ├── teams.tsx                 # "Coming soon" Teams placeholder
-            ├── profile.tsx               # "Coming soon" Profile placeholder
-            └── demo.tsx                  # Diagnostics & Sample Seeder
+            └── profile.tsx               # "Coming soon" Profile placeholder
 ```
 
 ---

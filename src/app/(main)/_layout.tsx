@@ -74,20 +74,6 @@ export default function MainLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="demo"
-        options={{
-          title: 'Diagnostics',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'flask' : 'flask-outline'}
-              size={22}
-              color={color}
-            />
-          ),
-        }}
-      />
     </Tabs>
   );
 }
