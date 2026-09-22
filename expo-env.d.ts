@@ -1,11 +1,3 @@
 /// <reference types="expo/types" />
 
-declare module '*.module.css' {
-  const content: { [className: string]: string };
-  export default content;
-}
-
-declare module '*.css' {
-  const content: Record<string, string>;
-  export default content;
-}
+// NOTE: This file should not be edited and should be in your git ignore
