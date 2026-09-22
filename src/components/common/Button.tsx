@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator,
-  StyleSheet,
   ViewStyle,
   TextStyle,
   useColorScheme,

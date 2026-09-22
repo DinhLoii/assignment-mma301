@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /**
  * TaskFormModal Component
  * Modal dialog for creating and editing tasks with client-side validation

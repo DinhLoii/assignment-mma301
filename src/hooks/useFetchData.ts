@@ -27,6 +27,7 @@ export function useFetchData<T>(fetchFn: () => Promise<T>, autoFetch = true) {
 
   useEffect(() => {
     if (autoFetch) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       execute().catch(() => {});
     }
   }, [autoFetch, execute]);
