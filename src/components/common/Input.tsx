@@ -1,5 +1,6 @@
 /**
  * Reusable Production Form Input Component
+ * Supports right icon action (e.g. date picker toggle, clear button, password eye)
  */
 
 import React from 'react';
@@ -7,6 +8,7 @@ import {
   View,
   Text,
   TextInput,
+  TouchableOpacity,
   StyleSheet,
   TextInputProps,
   ViewStyle,
@@ -15,11 +17,13 @@ import {
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 
-interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   helperText?: string;
   containerStyle?: ViewStyle;
+  rightIcon?: React.ReactNode;
+  onRightIconPress?: () => void;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -27,6 +31,8 @@ export const Input: React.FC<InputProps> = ({
   error,
   helperText,
   containerStyle,
+  rightIcon,
+  onRightIconPress,
   style,
   ...textInputProps
 }) => {
@@ -40,19 +46,38 @@ export const Input: React.FC<InputProps> = ({
         <Text style={[styles.label, { color: theme.textSecondary }]}>{label}</Text>
       ) : null}
 
-      <TextInput
-        placeholderTextColor={theme.textMuted}
+      <View
         style={[
-          styles.input,
+          styles.inputWrapper,
           {
             backgroundColor: theme.inputBackground,
             borderColor: error ? theme.danger : theme.border,
-            color: theme.text,
           },
-          style,
         ]}
-        {...textInputProps}
-      />
+      >
+        <TextInput
+          placeholderTextColor={theme.textMuted}
+          style={[
+            styles.input,
+            {
+              color: theme.text,
+            },
+            style,
+          ]}
+          {...textInputProps}
+        />
+
+        {rightIcon ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={onRightIconPress}
+            disabled={!onRightIconPress}
+            style={styles.iconButton}
+          >
+            {rightIcon}
+          </TouchableOpacity>
+        ) : null}
+      </View>
 
       {error ? (
         <Text style={[styles.error, { color: theme.danger }]}>{error}</Text>
@@ -72,12 +97,23 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     fontWeight: '600',
   },
-  input: {
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1.5,
     borderRadius: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
+  },
+  input: {
+    flex: 1,
     paddingVertical: 12,
     fontSize: 15,
+  },
+  iconButton: {
+    padding: 6,
+    marginLeft: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   error: {
     ...typography.caption,

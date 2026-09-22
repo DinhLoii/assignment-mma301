@@ -2,6 +2,7 @@
 /**
  * TaskFormModal Component
  * Modal dialog for creating and editing tasks with client-side validation
+ * Supports both manual date typing and interactive native calendar picker
  */
 
 import React, { useState, useEffect } from 'react';
@@ -17,6 +18,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Task, TaskPriority, TaskStatus } from '@/models/Task';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
@@ -65,6 +67,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
   const [dueDate, setDueDate] = useState('');
   const [titleError, setTitleError] = useState<string | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Sync state when task prop changes (Edit mode vs Create mode)
   useEffect(() => {
@@ -82,9 +85,13 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
       // Default due date: tomorrow
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      setDueDate(tomorrow.toISOString().split('T')[0]);
+      const yyyy = tomorrow.getFullYear();
+      const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const dd = String(tomorrow.getDate()).padStart(2, '0');
+      setDueDate(`${yyyy}-${mm}-${dd}`);
     }
     setTitleError(undefined);
+    setShowDatePicker(false);
   }, [task, visible]);
 
   const handleTitleChange = (text: string) => {
@@ -100,7 +107,38 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
   const handleSetQuickDate = (daysAhead: number) => {
     const d = new Date();
     d.setDate(d.getDate() + daysAhead);
-    setDueDate(d.toISOString().split('T')[0]);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    setDueDate(`${yyyy}-${mm}-${dd}`);
+  };
+
+  const getParsedDate = (): Date => {
+    if (dueDate) {
+      const parts = dueDate.split('-');
+      if (parts.length === 3) {
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const parsed = new Date(year, month, day);
+        if (!isNaN(parsed.getTime())) return parsed;
+      }
+    }
+    return new Date();
+  };
+
+  const handleDatePickerChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+    if (event.type === 'set' && selectedDate) {
+      const yyyy = selectedDate.getFullYear();
+      const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(selectedDate.getDate()).padStart(2, '0');
+      setDueDate(`${yyyy}-${mm}-${dd}`);
+    } else if (event.type === 'dismissed') {
+      setShowDatePicker(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -264,15 +302,46 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               </View>
             </View>
 
-            {/* Due Date with Quick Selectors */}
+            {/* Due Date with Interactive Calendar Picker & Direct Typing */}
             <View style={styles.fieldSection}>
-              <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Due Date (YYYY-MM-DD)</Text>
+              <View style={styles.dueDateHeaderRow}>
+                <Text style={[styles.fieldLabel, { color: theme.textSecondary, marginBottom: 0 }]}>
+                  Due Date (YYYY-MM-DD)
+                </Text>
+                <TouchableOpacity
+                  style={[styles.openCalendarBtn, { backgroundColor: theme.primaryLight }]}
+                  onPress={() => setShowDatePicker(true)}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="calendar" size={14} color={theme.primary} />
+                  <Text style={[styles.openCalendarText, { color: theme.primary }]}>
+                    Pick Date
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
               <Input
                 placeholder="YYYY-MM-DD (e.g. 2026-09-25)"
                 value={dueDate}
                 onChangeText={setDueDate}
                 containerStyle={{ marginBottom: 8 }}
+                rightIcon={
+                  <Ionicons name="calendar-outline" size={20} color={theme.primary} />
+                }
+                onRightIconPress={() => setShowDatePicker(true)}
               />
+
+              {/* Native Date Picker */}
+              {showDatePicker ? (
+                <DateTimePicker
+                  value={getParsedDate()}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  onChange={handleDatePickerChange}
+                />
+              ) : null}
+
+              {/* Quick Preset Date Buttons */}
               <View style={styles.quickDateRow}>
                 <TouchableOpacity
                   style={[styles.quickDatePill, { backgroundColor: isDark ? '#1E293B' : '#F1F5F9' }]}
@@ -374,6 +443,25 @@ const styles = StyleSheet.create({
     ...typography.caption,
     fontWeight: '600',
     marginBottom: 8,
+  },
+  dueDateHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  openCalendarBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  openCalendarText: {
+    ...typography.caption,
+    fontSize: 11,
+    fontWeight: '700',
   },
   segmentGroup: {
     flexDirection: 'row',
