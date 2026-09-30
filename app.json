@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "assignments",
-    "slug": "assignments",
+    "name": "assignment-mma301",
+    "slug": "assignment-mma301",
+    "owner": "dinhloii",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -11,6 +12,7 @@
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.dinhloii.assignment",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -38,6 +40,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d7c30bc1-ca72-4767-a399-67318e0884c0"
+      }
     }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "cli": {
+    "version": ">= 14.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCMV2N5XSjBnkuei2jTH4UANCrGRkdRcSw",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "assignment-mma301.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "assignment-mma301",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "assignment-mma301.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "434622898543",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:434622898543:web:68682cdd1130930f83489a",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-7XWGVP0F8G"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCMV2N5XSjBnkuei2jTH4UANCrGRkdRcSw",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "assignment-mma301.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "assignment-mma301",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "assignment-mma301.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "434622898543",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:434622898543:web:68682cdd1130930f83489a",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-7XWGVP0F8G"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
